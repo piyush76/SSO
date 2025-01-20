@@ -36,3 +36,7 @@ build/
 *.log
 *.gz
 *.tmp
+.env
+/src/main/resources/saml/
+.env.*
+!.env.example

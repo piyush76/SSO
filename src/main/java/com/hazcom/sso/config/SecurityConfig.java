@@ -4,18 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.saml2.provider.service.authentication.OpenSaml4AuthenticationProvider;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.springframework.security.saml2.provider.service.authentication.Saml2AuthenticationToken;
+import com.hazcom.sso.service.SamlUserService;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         OpenSaml4AuthenticationProvider authenticationProvider = new OpenSaml4AuthenticationProvider();
         authenticationProvider.setResponseAuthenticationConverter(responseToken -> {
-            var authentication = new OpenSaml4AuthenticationProvider.DefaultResponseAuthenticationConverter()
+            var authentication = OpenSaml4AuthenticationProvider.createDefaultResponseAuthenticationConverter()
                 .convert(responseToken);
             
             if (authentication == null) {
@@ -55,7 +49,7 @@ public class SecurityConfig {
                 .maximumSessions(1)
                 .expiredUrl("/login?expired")
                 .and()
-                .sessionFixation().migrateSession()
+                .sessionFixation(fixation -> fixation.migrateSession())
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .invalidSessionUrl("/login?invalid")
             )
