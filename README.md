@@ -35,6 +35,8 @@ The service requires the following SAML certificates and keys in the `src/main/r
 
 ## Building and Running
 
+### Using Maven
+
 ```bash
 # Build the project
 mvn clean package
@@ -48,6 +50,52 @@ export SSO_ENDPOINT_URL=/custom/saml/endpoint
 export HAZCOM_WEBSITE_URL=https://hazcom.example.com
 java -jar target/sso-service-0.0.1-SNAPSHOT.jar
 ```
+
+### Using Docker
+
+The application can be run using Docker with the provided Dockerfile:
+
+```bash
+# Build the Docker image
+docker build -t hazcom-sso .
+
+# Run with default configuration
+docker run -p 8080:8080 hazcom-sso
+
+# Run with custom configuration
+docker run -p 8080:8080 \
+  -e SESSION_TIMEOUT=15m \
+  -e SSO_ENDPOINT_URL=/custom/saml/endpoint \
+  -e HAZCOM_WEBSITE_URL=https://hazcom.example.com \
+  -v $(pwd)/src/main/resources/saml:/app/saml \
+  hazcom-sso
+```
+
+### Using Docker Compose
+
+For easier deployment, use Docker Compose:
+
+```bash
+# Start the service with default configuration
+docker-compose up -d
+
+# Start with custom configuration (set environment variables first)
+export SESSION_TIMEOUT=15m
+export SSO_ENDPOINT_URL=/custom/saml/endpoint
+export HAZCOM_WEBSITE_URL=https://hazcom.example.com
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the service
+docker-compose down
+```
+
+Make sure to place your SAML certificates in the `src/main/resources/saml` directory:
+- `azure-ad.crt`: Azure AD's certificate
+- `private.key`: Service Provider's private key
+- `public.crt`: Service Provider's public certificate
 
 ## API Endpoints
 
