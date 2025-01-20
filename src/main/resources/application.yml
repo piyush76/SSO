@@ -1,0 +1,41 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /sso
+    session:
+      timeout: ${app.session.timeout}
+
+# Application Configuration
+app:
+  sso:
+    endpoint-url: ${SSO_ENDPOINT_URL:/login/saml2/sso/azure-ad}
+  session:
+    timeout: ${SESSION_TIMEOUT:10m}
+
+# CORS Configuration for Hazcom Website
+cors:
+  allowed-origins: ${HAZCOM_WEBSITE_URL:http://localhost:3000}
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: Authorization,Content-Type
+  allow-credentials: true
+
+spring:
+  application:
+    name: hazcom-sso-service
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          azure-ad:
+            signing:
+              credentials:
+                - private-key-location: classpath:saml/private.key
+                  certificate-location: classpath:saml/public.crt
+            identityprovider:
+              entity-id: https://sts.windows.net/2e319086-9a26-46a3-865f-615bed576786/
+              verification:
+                credentials:
+                  - certificate-location: classpath:saml/azure-ad.crt
+              singlesignon:
+                url: https://login.microsoftonline.com/2e319086-9a26-46a3-865f-615bed576786/saml2
+                sign-request: true
