@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  sso-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SESSION_TIMEOUT=${SESSION_TIMEOUT:-10m}
+      - SSO_ENDPOINT_URL=${SSO_ENDPOINT_URL:-/login/saml2/sso/azure-ad}
+      - HAZCOM_WEBSITE_URL=${HAZCOM_WEBSITE_URL:-http://localhost:3000}
+    volumes:
+      - ./src/main/resources/saml:/app/saml
+    restart: unless-stopped
