@@ -37,6 +37,8 @@ build/
 *.gz
 *.tmp
 .env
-/src/main/resources/saml/
+/src/main/resources/saml/*
+!/src/main/resources/saml/README.md
 .env.*
 !.env.example
+/target/

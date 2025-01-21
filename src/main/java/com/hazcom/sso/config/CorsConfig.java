@@ -27,7 +27,9 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
+        // Allow both the configured origin and maxcomsc domain
         config.addAllowedOrigin(allowedOrigins);
+        config.addAllowedOrigin("https://app.maxcomsc.com");
         for (String method : allowedMethods.split(",")) {
             config.addAllowedMethod(method);
         }
