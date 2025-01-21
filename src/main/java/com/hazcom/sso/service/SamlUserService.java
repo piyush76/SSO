@@ -28,8 +28,14 @@ public class SamlUserService {
             // Extract additional attributes from SAML response
             var saml2Auth = (Saml2Authentication) authentication;
             var principal = (Saml2AuthenticatedPrincipal) saml2Auth.getPrincipal();
-            String firstName = principal.getFirstAttribute("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname");
-            String lastName = principal.getFirstAttribute("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname");
+            String firstName = getAttributeValue(
+                principal.getFirstAttribute("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"),
+                ""
+            );
+            String lastName = getAttributeValue(
+                principal.getFirstAttribute("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"),
+                ""
+            );
             
             logger.info("Created user details for: {} {} ({})", firstName, lastName, email);
             
@@ -40,7 +46,8 @@ public class SamlUserService {
         }
     }
 
-    private String getAttributeValue(String value) {
-        return value != null ? value : "";
+    // Helper method to safely get attribute value
+    private String getAttributeValue(String value, String defaultValue) {
+        return value != null ? value : defaultValue;
     }
 }
