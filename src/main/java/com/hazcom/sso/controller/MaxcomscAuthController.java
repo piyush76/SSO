@@ -23,10 +23,13 @@ public class MaxcomscAuthController {
     @Value("${cors.allowed-origins}")
     private String maxcomscUrl;
 
+    @Value("${app.sso.endpoint-url}")
+    private String ssoEndpointUrl;
+
     @GetMapping("/login")
     public RedirectView login() {
         logger.info("Redirecting to SAML SSO login");
-        return new RedirectView("/sso/saml2/authenticate/azure-ad");
+        return new RedirectView("/sso" + ssoEndpointUrl);
     }
 
     @GetMapping("/auth-success")

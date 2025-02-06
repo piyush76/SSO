@@ -6,12 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${SERVER_PORT:-8080}:8080"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
-      - SERVER_PORT=8080
-      - SESSION_TIMEOUT=${SESSION_TIMEOUT:-10m}
-      - SSO_ENDPOINT_URL=${SSO_ENDPOINT_URL:-/login/saml2/sso/azure-ad}
-      - HAZCOM_WEBSITE_URL=${HAZCOM_WEBSITE_URL:-http://localhost:3000}
+      - SERVER_PORT=${SERVER_PORT}
+      - SESSION_TIMEOUT=${SESSION_TIMEOUT}
+      - SSO_ENDPOINT_URL=${SSO_ENDPOINT_URL}
+      - HAZCOM_WEBSITE_URL=${HAZCOM_WEBSITE_URL}
+      - SP_ENTITY_ID=${SP_ENTITY_ID}
+      - IDP_ENTITY_ID=${IDP_ENTITY_ID}
+      - IDP_SSO_URL=${IDP_SSO_URL}
+      - SP_ACS_URL=${SP_ACS_URL}
+      - SP_KEY_LOCATION=${SP_KEY_LOCATION}
+      - SP_CERT_LOCATION=${SP_CERT_LOCATION}
+      - IDP_CERT_LOCATION=${IDP_CERT_LOCATION}
     volumes:
-      - ./src/main/resources/saml:/app/saml
+      - ${CERT_PATH}:/app/certs
     restart: unless-stopped
