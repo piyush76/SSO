@@ -10,6 +10,15 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
+    /**
+     * Get authenticated user details
+     * 
+     * @return Map containing user details:
+     *         - name: User's email/username
+     *         - authorities: List of granted authorities
+     * @throws org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
+     *         if user is not authenticated
+     */
     @GetMapping("/auth/user")
     public Map<String, Object> user() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -19,6 +28,11 @@ public class AuthController {
         return userDetails;
     }
 
+    /**
+     * Welcome endpoint - publicly accessible
+     * 
+     * @return Welcome message
+     */
     @GetMapping("/")
     public String home() {
         return "Welcome to Hazcom SSO Service";
