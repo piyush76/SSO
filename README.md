@@ -1,4 +1,4 @@
-# Hazcom SSO Service
+# SSO Service
 
 Spring Boot service implementing SAML Single Sign-On (SSO) authentication for the Hazcom website using Azure AD as the identity provider.
 
